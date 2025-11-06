@@ -1,12 +1,5 @@
-[package]
-name = "project_ferriosynth"
-version = "0.0.1"
-authors = ["Marco Ramos marcoandreramos17@gmail.com>"]
-edition = "2021"
-description = "Testing the uses of AI in text-driven games"
-license = "MIT"
-repository = "https://github.com/marcoramos17/Project-Ferriosynth"
-homepage = "https://marcoramos17.github.io/rust-template"
-documentation = "https://marcoramos17.github.io/rust-template"
+[workspace]
+members = [ "data", "engine", "game", "game_ai", "render"]
 
-[dependencies]
+resolver = "2"
+
