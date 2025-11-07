@@ -1,76 +1,81 @@
-use pixels::{Pixels, SurfaceTexture};
+use engine::controls::Controls;
+use engine::world::World;
+use render::Renderer;
+
 use winit::{
+    application::ApplicationHandler,
     dpi::LogicalSize,
-    event::{Event, WindowEvent, KeyEvent, ElementState},
-    event_loop::EventLoop,
-    keyboard::{KeyCode, PhysicalKey},
-    window::WindowAttributes,
+    event::WindowEvent,
+    event_loop::{ActiveEventLoop, EventLoop},
+    window::{Window, WindowId},
 };
 
 const WIDTH: u32 = 320;
 const HEIGHT: u32 = 240;
 
-fn main() {
-    // Create event loop + window
-    let event_loop = EventLoop::new().unwrap();
-    let window = event_loop
-        .create_window(
-            WindowAttributes::new()
-                .with_title("Ferriosynth Prototype")
-                .with_inner_size(LogicalSize::new(WIDTH as f64, HEIGHT as f64)),
-        )
-        .unwrap();
+struct GameApp {
+    world: World,
+    renderer: Option<Renderer<'static>>,
+    window: Option<&'static Window>,
+    window_id: Option<WindowId>,
+}
 
-    // Create pixel buffer
-    let window_size = window.inner_size();
-    let surface_texture = SurfaceTexture::new(window_size.width, window_size.height, &window);
-    let mut pixels = Pixels::new(WIDTH, HEIGHT, surface_texture).unwrap();
+impl ApplicationHandler for GameApp {
+    fn resumed(&mut self, event_loop: &ActiveEventLoop) {
+        // Create the window
+        let window = event_loop
+            .create_window(
+                Window::default_attributes()
+                    .with_title("Ferriosynth Prototype")
+                    .with_inner_size(LogicalSize::new(WIDTH as f64, HEIGHT as f64)),
+            )
+            .unwrap();
 
-    // Capture a reference instead of moving the window
-    let window_ref = &window;
+        // Leak the window to get a 'static reference for the whole app lifetime
+        let window_ref: &'static Window = Box::leak(Box::new(window));
 
-    // Run loop
-    event_loop.run(move |event, elwt| {
+        self.window = Some(window_ref);
+        self.window_id = Some(window_ref.id());
+        self.renderer = Some(Renderer::new(WIDTH, HEIGHT, window_ref));
+    }
+
+    fn window_event(&mut self, event_loop: &ActiveEventLoop, id: WindowId, event: WindowEvent) {
+        // Only handle events for our window
+        if Some(id) != self.window_id {
+            return;
+        }
+
         match event {
-            Event::WindowEvent { event, .. } => match event {
-                WindowEvent::CloseRequested => elwt.exit(),
+            WindowEvent::CloseRequested => event_loop.exit(),
+            WindowEvent::KeyboardInput { event, .. } => {
+                let controls = Controls::from_key_event(&event);
+                self.world.handle_controls(controls);
 
-                WindowEvent::KeyboardInput {
-                    event: KeyEvent { physical_key, state, .. },
-                    ..
-                } => {
-                    if let PhysicalKey::Code(code) = physical_key {
-                        match code {
-                            KeyCode::ArrowUp if state == ElementState::Pressed => {
-                                println!("Up pressed!");
-                            }
-                            KeyCode::ArrowDown if state == ElementState::Pressed => {
-                                println!("Down pressed!");
-                            }
-                            _ => {}
-                        }
-                    }
+                // trigger redraw after input
+                if let Some(w) = self.window {
+                    w.request_redraw();
                 }
-
-                WindowEvent::RedrawRequested => {
-                    let frame = pixels.frame_mut();
-                    for chunk in frame.chunks_exact_mut(4) {
-                        chunk.copy_from_slice(&[0x00, 0x80, 0x00, 0xff]); // green
-                    }
-
-                    if pixels.render().is_err() {
-                        elwt.exit();
-                    }
-                }
-
-                _ => {}
-            },
-
-            Event::AboutToWait => {
-                window_ref.request_redraw(); // use the borrowed reference
             }
-
+            WindowEvent::RedrawRequested => {
+                if let Some(renderer) = &mut self.renderer {
+                    renderer.draw(&self.world);
+                    if renderer.render().is_err() {
+                        event_loop.exit();
+                    }
+                }
+            }
             _ => {}
         }
-    });
+    }
+}
+
+fn main() {
+    let event_loop = EventLoop::new().unwrap();
+    let mut app = GameApp {
+        world: World::new(),
+        renderer: None,
+        window: None,
+        window_id: None,
+    };
+    event_loop.run_app(&mut app).unwrap();
 }

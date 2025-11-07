@@ -4,3 +4,6 @@ version = "0.1.0"
 edition = "2021"
 
 [dependencies]
+winit = "0.30.12"
+pixels = "0.15"
+engine = { path = "../engine" }

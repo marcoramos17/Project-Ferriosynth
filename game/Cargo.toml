@@ -5,7 +5,5 @@ edition = "2021"
 
 [dependencies]
 winit = "0.30.12"
-pixels = "0.15"
-
-[patch.crates-io]
-raw-window-handle = "0.6.2"
+engine = { path = "../engine" }
+render = { path = "../render" }
