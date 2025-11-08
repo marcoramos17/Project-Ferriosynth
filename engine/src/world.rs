@@ -14,7 +14,10 @@ impl World {
         match controls {
             Controls::MoveUp => self.player.move_up(),
             Controls::MoveDown => self.player.move_down(),
+            Controls::MoveLeft => self.player.move_left(),
+            Controls::MoveRight => self.player.move_right(),
             Controls::None => {}
         }
     }
+
 }
