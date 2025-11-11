@@ -23,12 +23,10 @@ impl<'win> Renderer<'win> {
         let w = self.width as usize;
         let h = self.height as usize;
 
-        // Fill background green
         for chunk in frame.chunks_exact_mut(4) {
             chunk.copy_from_slice(&[0x00, 0x80, 0x00, 0xff]);
         }
 
-        // Draw player as blue square
         let player = &world.player;
         let size = player.renderable.width;
         let x = player.renderable.x;
@@ -40,7 +38,7 @@ impl<'win> Renderer<'win> {
                 let py = ((y + dy as i32).clamp(0, h as i32 - 1)) as usize;
 
                 let idx = (py * w + px) * 4;
-                frame[idx..idx + 4].copy_from_slice(&[0x00, 0x00, 0xff, 0xff]); // blue
+                frame[idx..idx + 4].copy_from_slice(&[0x00, 0x00, 0xff, 0xff]);
             }
         }
     }

@@ -7,3 +7,4 @@ edition = "2021"
 winit = "0.30.12"
 pixels = "0.15"
 engine = { path = "../engine" }
+entities = { path = "../entities" }
