@@ -7,7 +7,7 @@
 
 <!-- Rustdoc Pages Shield with Logo -->
 
-<a href="https://marcoramos17.github.io/rust-template/rust_template/">
+<a href="https://marcoramos17.github.io/Project-Ferriosynth/">
     <img src="https://img.shields.io/badge/docs-available-brightgreen" alt="{RustDoc} Pages"></a>
 </div>
 
