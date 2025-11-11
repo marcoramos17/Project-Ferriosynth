@@ -1,5 +1,5 @@
 [workspace]
-members = [ "data", "engine", "game", "game_ai", "render"]
+members = [ "data", "engine", "entities", "game", "game_ai", "render"]
 
 resolver = "2"
 

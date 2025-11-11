@@ -1,3 +1,5 @@
+pub mod window;
+
 use pixels::{Pixels, SurfaceTexture};
 use winit::window::Window;
 use engine::world::World;
@@ -18,6 +20,8 @@ impl<'win> Renderer<'win> {
 
     pub fn draw(&mut self, world: &World) {
         let frame = self.pixels.frame_mut();
+        let w = self.width as usize;
+        let h = self.height as usize;
 
         // Fill background green
         for chunk in frame.chunks_exact_mut(4) {
@@ -26,14 +30,14 @@ impl<'win> Renderer<'win> {
 
         // Draw player as blue square
         let player = &world.player;
-        let size = player.size as usize;
-        let w = self.width as usize;
-        let h = self.height as usize;
+        let size = player.renderable.width;
+        let x = player.renderable.x;
+        let y = player.renderable.y;
 
         for dy in 0..size {
             for dx in 0..size {
-                let px = (player.x as usize + dx).clamp(0, w - 1);
-                let py = (player.y as usize + dy).clamp(0, h - 1);
+                let px = ((x + dx as i32).clamp(0, w as i32 - 1)) as usize;
+                let py = ((y + dy as i32).clamp(0, h as i32 - 1)) as usize;
 
                 let idx = (py * w + px) * 4;
                 frame[idx..idx + 4].copy_from_slice(&[0x00, 0x00, 0xff, 0xff]); // blue

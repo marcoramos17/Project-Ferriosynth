@@ -6,3 +6,5 @@ edition = "2021"
 [dependencies]
 winit = "0.30.12"
 pixels = "0.15"
+entities = { path = "../entities" }
+

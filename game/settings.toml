@@ -1,0 +1,10 @@
+[window]
+width = 320
+height = 240
+fullscreen = false
+
+[controls]
+up = "ArrowUp"
+down = "ArrowDown"
+left = "ArrowLeft"
+right = "ArrowRight"

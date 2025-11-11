@@ -9,6 +9,8 @@
       <sourceFolder url="file://$MODULE_DIR$/game/src" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/game_ai/src" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/render/src" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/entities/src" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/player/src" isTestSource="false" />
       <excludeFolder url="file://$MODULE_DIR$/Cargo/target" />
       <excludeFolder url="file://$MODULE_DIR$/target" />
     </content>
