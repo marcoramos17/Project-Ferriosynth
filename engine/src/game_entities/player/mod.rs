@@ -2,7 +2,8 @@ pub mod render;
 
 use entities::stats::Stats;
 use entities::renderable::Renderable;
-use entities::controls::{Controls, Controllable};
+use entities::controls::{Controllable, Controls};
+
 
 pub struct Player {
     pub stats: Stats,
@@ -13,43 +14,36 @@ impl Player {
     pub fn new() -> Self {
         Self {
             stats: Stats::new(100, 50),
-            renderable: Renderable {
-                x: 50,
-                y: 50,
-                width: 32,
-                height: 32,
-                color: [0, 0, 255, 255], // blue
-            },
+            renderable: Renderable::new(50, 50, 32, 32, [0, 0, 255, 255]),
         }
     }
 
+    pub fn move_by(&mut self, dx: i32, dy: i32) {
+        self.renderable.x += dx;
+        self.renderable.y += dy;
+    }
+
     pub fn position(&self) -> (i32, i32) {
-        (self.renderable.x, self.renderable.y)
+        self.renderable.position()
     }
 
     pub fn size(&self) -> u32 {
-        self.renderable.width
+        self.renderable.size()
     }
 
     pub fn color(&self) -> [u8; 4] {
-        self.renderable.color
+        self.renderable.color()
     }
-
-    pub fn move_up(&mut self) { self.renderable.y -= 5; }
-    pub fn move_down(&mut self) { self.renderable.y += 5; }
-    pub fn move_left(&mut self) { self.renderable.x -= 5; }
-    pub fn move_right(&mut self) { self.renderable.x += 5; }
 }
 
 impl Controllable for Player {
     fn handle_controls(&mut self, controls: Controls) {
         match controls {
-            Controls::MoveUp => self.move_up(),
-            Controls::MoveDown => self.move_down(),
-            Controls::MoveLeft => self.move_left(),
-            Controls::MoveRight => self.move_right(),
+            Controls::MoveUp => self.move_by(0, -5),
+            Controls::MoveDown => self.move_by(0, 5),
+            Controls::MoveLeft => self.move_by(-5, 0),
+            Controls::MoveRight => self.move_by(5, 0),
             _ => {}
         }
     }
 }
-

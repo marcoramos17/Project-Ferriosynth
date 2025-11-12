@@ -26,7 +26,6 @@ impl KeyBindings {
             k if k == self.down => Controls::MoveDown,
             k if k == self.left => Controls::MoveLeft,
             k if k == self.right => Controls::MoveRight,
-            k if k == self.menu => Controls::OpenMenu,
             _ => Controls::None,
         }
     }
