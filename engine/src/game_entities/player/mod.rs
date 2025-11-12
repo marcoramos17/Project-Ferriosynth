@@ -1,5 +1,7 @@
+pub mod render;
+
 use entities::stats::Stats;
-use entities::render::Renderable;
+use entities::renderable::Renderable;
 use entities::controls::{Controls, Controllable};
 
 pub struct Player {
@@ -21,6 +23,18 @@ impl Player {
         }
     }
 
+    pub fn position(&self) -> (i32, i32) {
+        (self.renderable.x, self.renderable.y)
+    }
+
+    pub fn size(&self) -> u32 {
+        self.renderable.width
+    }
+
+    pub fn color(&self) -> [u8; 4] {
+        self.renderable.color
+    }
+
     pub fn move_up(&mut self) { self.renderable.y -= 5; }
     pub fn move_down(&mut self) { self.renderable.y += 5; }
     pub fn move_left(&mut self) { self.renderable.x -= 5; }
@@ -34,7 +48,8 @@ impl Controllable for Player {
             Controls::MoveDown => self.move_down(),
             Controls::MoveLeft => self.move_left(),
             Controls::MoveRight => self.move_right(),
-            Controls::None => {}
+            _ => {}
         }
     }
 }
+

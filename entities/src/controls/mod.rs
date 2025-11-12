@@ -1,24 +1,18 @@
-use winit::keyboard::{KeyCode, PhysicalKey};
-use winit::event::KeyEvent;
+pub mod input;
+pub mod bindings;
 
+pub use input::map_key_event;
+pub use bindings::KeyBindings;
+
+#[derive(Debug, Clone, Copy, PartialEq, Eq)]
 pub enum Controls {
     MoveUp,
     MoveDown,
     MoveLeft,
     MoveRight,
+    OpenMenu,
+    Pause,
     None,
-}
-
-impl Controls {
-    pub fn from_key_event(event: &KeyEvent) -> Self {
-        match event.physical_key {
-            PhysicalKey::Code(KeyCode::ArrowUp) => Controls::MoveUp,
-            PhysicalKey::Code(KeyCode::ArrowDown) => Controls::MoveDown,
-            PhysicalKey::Code(KeyCode::ArrowLeft) => Controls::MoveLeft,
-            PhysicalKey::Code(KeyCode::ArrowRight) => Controls::MoveRight,
-            _ => Controls::None,
-        }
-    }
 }
 
 pub trait Controllable {

@@ -1,4 +1,3 @@
-use entities::render::Renderable;
 use crate::game_entities::player::Player;
 use entities::controls::{Controls, Controllable};
 

@@ -1,5 +1,5 @@
-pub mod render;
-pub use render::Renderable;
+pub mod renderable;
+pub use renderable::Renderable;
 
 pub mod stats;
 pub use stats::Stats;

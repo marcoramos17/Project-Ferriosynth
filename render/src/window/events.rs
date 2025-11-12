@@ -8,9 +8,9 @@ use winit::{
     event_loop::ActiveEventLoop,
     window::WindowId,
 };
-
+use crate::draw::draw_scene;
 use engine::world::World;
-use entities::controls::{Controls, Controllable};
+use entities::controls::{Controllable, KeyBindings, map_key_event};
 use crate::Renderer;
 
 /// Processes a single window event and updates the game state accordingly.
@@ -41,12 +41,14 @@ pub fn handle_window_event(
     match event {
         WindowEvent::CloseRequested => event_loop.exit(),
         WindowEvent::KeyboardInput { event: key_event, .. } => {
-            let controls = Controls::from_key_event(&key_event);
+            let bindings = KeyBindings::default(); // Replace with from_settings() later
+            let controls = map_key_event(&key_event, &bindings);
             world.player.handle_controls(controls);
             window.request_redraw();
         }
+
         WindowEvent::RedrawRequested => {
-            renderer.draw(world);
+            draw_scene(renderer, world);
             if renderer.render().is_err() {
                 event_loop.exit();
             }
